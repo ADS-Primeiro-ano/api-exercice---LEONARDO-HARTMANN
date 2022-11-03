@@ -12,10 +12,8 @@ export class Empresa {
   nomebarbearia: string;
 
   @Column()
-  nomefuncionario: number;
+  nomefuncionario: string;
 
-  @Column()
-  horariodefuncionamento: number;
 
   @Column({ default: true })
   isActive: boolean;

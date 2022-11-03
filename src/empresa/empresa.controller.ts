@@ -1,22 +1,19 @@
 import { Controller, Get, Post, Req, Res, Param, Put, Patch, Delete, Body } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Request, response, Response } from 'express';
+import { Empresa } from './empresa.entity';
 import { EmpresaService } from './empresa.service';
 
-
-
-
-
-@Controller({host: 'aondeeuencontro.com'}) //aqui estamos mapeando a rota de controle
+@Controller('/barbearias') //aqui estamos mapeando a rota de controle
 class EmpresaController {
   constructor(private readonly service: EmpresaService) {}
 
-  @Post('/barbearias/cadastrar')
+  @Post('/cadastrar')
   async create(@Req() request: Request, @Res() response: Response) { //quando o a requisição do create for feita vai ser encaminhada ao "cliente.service"
-    const { nomebarbearia, nomefuncionario, horariodefuncionamento } = request.body;
+    const { nomebarbearia, nomefuncionario } = request.body;
 
-    const user = await this.service.create({  nomebarbearia, nomefuncionario, horariodefuncionamento }); //await = está aguardando o retorno do "cliente.service" da requisição create ser concluida
+    const user = await this.service.create({  nomebarbearia, nomefuncionario }); //await = está aguardando o retorno do "cliente.service" da requisição create ser concluida
 
-    return response.json(user).send("Cadastrado! - 201");// vai retornar uma resposta com os dados cadastrados
+    return response.json(user).send();// vai retornar uma resposta com os dados cadastrados
   }
 
   @Get('/cadastros')
@@ -27,20 +24,28 @@ class EmpresaController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: number, @Body()Body) {
-    const tmp = await Body();
+  async update(@Param('id') id: number, @Body() body: Empresa) {
+    
+    const temp = await this.service.update(Number(id), body);
 
-    return response.json(tmp).send("");
+    return response.json(temp).send();
   }
 
-  @Patch()
+  @Patch(':id')
+  async updatePatch(@Param('id') id: number, response: Response) {
+    
+    const atualizarpacote = await this.service.update(Number(id), response);
 
-
-  @Delete(':id')
-  remove(@Req('id') id: number) {
-    return `This action removes a #${id} cat`;
+    return response.json(atualizarpacote).send();
   }
   
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    await this.service.delete(id);
+
+    return response.json(id).send();
+  }
+
 }
 
 export { EmpresaController };
