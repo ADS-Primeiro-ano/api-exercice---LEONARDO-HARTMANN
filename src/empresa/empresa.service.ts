@@ -37,9 +37,10 @@ export class EmpresaService {
     return users; //retornando resposta dos cadastros
   }
 
-  async update(id: number, body) {
-    const atualizar = await this.empresaRepository.update(id, body);
+  async update(id: number, {nomebarbearia, nomefuncionario}: Request) {
 
+    const atualizar = await this.empresaRepository.update(id, {nomebarbearia, nomefuncionario});
+    console.log(atualizar)
     return atualizar;
   }
 
@@ -49,8 +50,15 @@ export class EmpresaService {
     return deletar;
   }
 
-  async updatePatch(id: number, request: Request) {
-    const atualizarpacote = await this.empresaRepository.update(id, request);
+  async updateNomepadaria(id: number, {nomebarbearia}: Request) {
+    const atualizarpacote = await this.empresaRepository.update(id, {nomebarbearia});
+
+    return atualizarpacote;
+
+  }
+
+  async updateFuncionario(id: number, {nomefuncionario}: Request) {
+    const atualizarpacote = await this.empresaRepository.update(id, {nomefuncionario});
 
     return atualizarpacote;
 

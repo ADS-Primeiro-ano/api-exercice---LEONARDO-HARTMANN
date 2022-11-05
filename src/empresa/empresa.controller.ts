@@ -23,24 +23,35 @@ class EmpresaController {
     return response.json(user).send(); //enviando resposta dos clientes
   }
 
-  @Put(':id')
-  async update(@Param('id') id: number, @Body() body: Empresa) {
-    
-    const temp = await this.service.update(Number(id), body);
+  @Put('/:id')
+  async update(@Res() response: Response, @Req() request : Request) {
+    const { id } = request.params;
+    const {nomebarbearia, nomefuncionario } = request.body;
+    const temp = await this.service.update(Number(id), {nomebarbearia, nomefuncionario});
 
     return response.json(temp).send();
   }
 
-  @Patch(':id')
-  async updatePatch(@Param('id') id: number, response: Response) {
-    
-    const atualizarpacote = await this.service.update(Number(id), response);
+  @Patch('/:id')
+  async updateNomepadaria(@Req() request: Request, @Res() response: Response) {
+    const { id } = request.params;
+    const {nomebarbearia, nomefuncionario} = request.body;
+    const atualizarpacote = await this.service.updateNomepadaria(Number(id), {nomebarbearia, nomefuncionario});
+
+    return response.json(atualizarpacote).send();
+  }
+
+  @Patch('/:id')
+  async updateFuncionario(@Req() request: Request, @Res() response: Response) {
+    const { id } = request.params;
+    const {nomebarbearia, nomefuncionario} = request.body;
+    const atualizarpacote = await this.service.updateFuncionario(Number(id), {nomebarbearia, nomefuncionario});
 
     return response.json(atualizarpacote).send();
   }
   
-  @Delete(':id')
-  async delete(@Param('id') id: number) {
+  @Delete('/:id')
+  async delete(@Param('id') id: number, @Res() response: Response) {
     await this.service.delete(id);
 
     return response.json(id).send();
